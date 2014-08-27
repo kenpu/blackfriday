@@ -184,13 +184,19 @@ func (options *Html) Header(out *bytes.Buffer, text func() bool, level int, id s
 	marker := out.Len()
 	doubleSpace(out)
 
+	cssClass := ""
+	if id == "__underlined__" {
+		id = ""
+		cssClass = "underlined-header"
+	}
+
 	if id != "" {
-		out.WriteString(fmt.Sprintf("<h%d id=\"%s\">", level, id))
+		out.WriteString(fmt.Sprintf("<h%d id=\"%s\" class=\"%s\">", level, id, cssClass))
 	} else if options.flags&HTML_TOC != 0 {
 		// headerCount is incremented in htmlTocHeader
-		out.WriteString(fmt.Sprintf("<h%d id=\"toc_%d\">", level, options.headerCount))
+		out.WriteString(fmt.Sprintf("<h%d id=\"toc_%d\" class=\"%s\">", level, options.headerCount, cssClass))
 	} else {
-		out.WriteString(fmt.Sprintf("<h%d>", level))
+		out.WriteString(fmt.Sprintf("<h%d class=\"%s\">", level, cssClass))
 	}
 
 	tocMarker := out.Len()
